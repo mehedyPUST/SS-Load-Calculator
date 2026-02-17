@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Load Calculator · Tailwind CLI</title>
+  <link rel="stylesheet" href="./output.css">
+  <!-- Font Inter (optional but matches original) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    /* Custom CSS that remains useful even with Tailwind utilities */
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Hide number input spinners */
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100 flex justify-center items-start min-h-screen">
+
+  <!-- Main card with gradient background -->
+  <div class="w-full max-w-[480px] p-5 rounded-[15px] backdrop-blur-sm border border-white/40 shadow-lg"
+    style="background: linear-gradient(135deg, rgb(7, 172, 163), yellow);">
+
+    <!-- Header section -->
+    <header>
+      <h2 class="text-center mb-1 text-white font-semibold">WZPDCL-Bottail-Kushtia</h2>
+      <p class="text-center mb-1 text-white">33/11 KV Power Substation</p>
+      <h2 class="text-center mb-1 text-white font-semibold">Load Calculator</h2>
+    </header>
+
+    <!-- Clock display -->
+    <div class="text-center bg-black text-[#00ff88] p-2.5 rounded-lg mb-4">
+      <div class="text-sm" id="date"></div>
+      <div class="text-[22px] font-semibold" id="time"></div>
+    </div>
+
+    <!-- ===== 9 feeder rows (identical structure, only labels/ids change) ===== -->
+    <!-- Row 1: BRB -->
+    <div class="grid grid-cols-3 items-center gap-2 mb-2">
+      <div class="relative flex items-center w-full bg-white/85 rounded-md border border-gray-300 h-9">
+        <input type="number" id="i1"
+          class="w-full py-1.5 pl-2 pr-1 text-sm text-left bg-transparent border-none outline-none" placeholder="0.0"
+          step="any" value="" aria-label="BRB input in amperes">
+        <span class="pr-2 font-semibold text-xs text-gray-700">A</span>
+      </div>
+      <div
+        class="text-center font-semibold bg-white/80 rounded-md px-1 py-1.5 text-gray-800 h-9 flex items-center justify-center text-sm">
+        BRB</div>
+      <div id="o1"
+        class="w-full bg-gray-200 rounded-md border border-gray-300 text-sm font-semibold text-gray-900 flex items-center justify-end px-2 h-9">
+        0.0 MW</div>
+    </div>
+    <!-- Row 2: MRS -->
+    <div class="grid grid-cols-3 items-center gap-2 mb-2">
+      <div class="relative flex items-center w-full bg-white/85 rounded-md border border-gray-300 h-9">
+        <input type="number" id="i2"
+          class="w-full py-1.5 pl-2 pr-1 text-sm text-left bg-transparent border-none outline-none" placeholder="0.0"
+          step="any" value="" aria-label="MRS input in amperes">
+        <span class="pr-2 font-semibold text-xs text-gray-700">A</span>
+      </div>
+      <div
+        class="text-center font-semibold bg-white/80 rounded-md px-1 py-1.5 text-gray-800 h-9 flex items-center justify-center text-sm">
+        MRS</div>
+      <div id="o2"
+        class="w-full bg-gray-200 rounded-md border border-gray-300 text-sm font-semibold text-gray-900 flex items-center justify-end px-2 h-9">
+        0.0 MW</div>
+    </div>
+    <!-- Row 3: Mozompur -->
+    <div class="grid grid-cols-3 items-center gap-2 mb-2">
+      <div class="relative flex items-center w-full bg-white/85 rounded-md border border-gray-300 h-9">
+        <input type="number" id="i3"
+          class="w-full py-1.5 pl-2 pr-1 text-sm text-left bg-transparent border-none outline-none" placeholder="0.0"
+          step="any" value="" aria-label="Mozompur input in amperes">
+        <span class="pr-2 font-semibold text-xs text-gray-700">A</span>
+      </div>
+      <div
+        class="text-center font-semibold bg-white/80 rounded-md px-1 py-1.5 text-gray-800 h-9 flex items-center justify-center text-sm">
+        Mozompur</div>
+      <div id="o3"
+        class="w-full bg-gray-200 rounded-md border border-gray-300 text-sm font-semibold text-gray-900 flex items-center justify-end px-2 h-9">
+        0.0 MW</div>
+    </div>
+    <!-- Row 4: Housing -->
+    <div class="grid grid-cols-3 items-center gap-2 mb-2">
+      <div class="relative flex items-center w-full bg-white/85 rounded-md border border-gray-300 h-9">
+        <input type="number" id="i4"
+          class="w-full py-1.5 pl-2 pr-1 text-sm text-left bg-transparent border-none outline-none" placeholder="0.0"
+          step="any" value="" aria-label="Housing input in amperes">
+        <span class="pr-2 font-semibold text-xs text-gray-700">A</span>
+      </div>
+      <div
+        class="text-center font-semibold bg-white/80 rounded-md px-1 py-1.5 text-gray-800 h-9 flex items-center justify-center text-sm">
+        Housing</div>
+      <div id="o4"
+        class="w-full bg-gray-200 rounded-md border border-gray-300 text-sm font-semibold text-gray-900 flex items-center justify-end px-2 h-9">
+        0.0 MW</div>
+    </div>
+    <!-- Row 5: Rajbari -->
+    <div class="grid grid-cols-3 items-center gap-2 mb-2">
+      <div class="relative flex items-center w-full bg-white/85 rounded-md border border-gray-300 h-9">
+        <input type="number" id="i5"
+          class="w-full py-1.5 pl-2 pr-1 text-sm text-left bg-transparent border-none outline-none" placeholder="0.0"
+          step="any" value="" aria-label="Rajbari input in amperes">
+        <span class="pr-2 font-semibold text-xs text-gray-700">A</span>
+      </div>
+      <div
+        class="text-center font-semibold bg-white/80 rounded-md px-1 py-1.5 text-gray-800 h-9 flex items-center justify-center text-sm">
+        Rajbari</div>
+      <div id="o5"
+        class="w-full bg-gray-200 rounded-md border border-gray-300 text-sm font-semibold text-gray-900 flex items-center justify-end px-2 h-9">
+        0.0 MW</div>
+    </div>
+    <!-- Row 6: Campus -->
+    <div class="grid grid-cols-3 items-center gap-2 mb-2">
+      <div class="relative flex items-center w-full bg-white/85 rounded-md border border-gray-300 h-9">
+        <input type="number" id="i6"
+          class="w-full py-1.5 pl-2 pr-1 text-sm text-left bg-transparent border-none outline-none" placeholder="0.0"
+          step="any" value="" aria-label="Campus input in amperes">
+        <span class="pr-2 font-semibold text-xs text-gray-700">A</span>
+      </div>
+      <div
+        class="text-center font-semibold bg-white/80 rounded-md px-1 py-1.5 text-gray-800 h-9 flex items-center justify-center text-sm">
+        Campus</div>
+      <div id="o6"
+        class="w-full bg-gray-200 rounded-md border border-gray-300 text-sm font-semibold text-gray-900 flex items-center justify-end px-2 h-9">
+        0.0 MW</div>
+    </div>
+    <!-- Row 7: Koburhat -->
+    <div class="grid grid-cols-3 items-center gap-2 mb-2">
+      <div class="relative flex items-center w-full bg-white/85 rounded-md border border-gray-300 h-9">
+        <input type="number" id="i7"
+          class="w-full py-1.5 pl-2 pr-1 text-sm text-left bg-transparent border-none outline-none" placeholder="0.0"
+          step="any" value="" aria-label="Koburhat input in amperes">
+        <span class="pr-2 font-semibold text-xs text-gray-700">A</span>
+      </div>
+      <div
+        class="text-center font-semibold bg-white/80 rounded-md px-1 py-1.5 text-gray-800 h-9 flex items-center justify-center text-sm">
+        Koburhat</div>
+      <div id="o7"
+        class="w-full bg-gray-200 rounded-md border border-gray-300 text-sm font-semibold text-gray-900 flex items-center justify-end px-2 h-9">
+        0.0 MW</div>
+    </div>
+    <!-- Row 8: H-3 -->
+    <div class="grid grid-cols-3 items-center gap-2 mb-2">
+      <div class="relative flex items-center w-full bg-white/85 rounded-md border border-gray-300 h-9">
+        <input type="number" id="i8"
+          class="w-full py-1.5 pl-2 pr-1 text-sm text-left bg-transparent border-none outline-none" placeholder="0.0"
+          step="any" value="" aria-label="H-3 input in amperes">
+        <span class="pr-2 font-semibold text-xs text-gray-700">A</span>
+      </div>
+      <div
+        class="text-center font-semibold bg-white/80 rounded-md px-1 py-1.5 text-gray-800 h-9 flex items-center justify-center text-sm">
+        H-3</div>
+      <div id="o8"
+        class="w-full bg-gray-200 rounded-md border border-gray-300 text-sm font-semibold text-gray-900 flex items-center justify-end px-2 h-9">
+        0.0 MW</div>
+    </div>
+    <!-- Row 9: T-3 -->
+    <div class="grid grid-cols-3 items-center gap-2 mb-2">
+      <div class="relative flex items-center w-full bg-white/85 rounded-md border border-gray-300 h-9">
+        <input type="number" id="i9"
+          class="w-full py-1.5 pl-2 pr-1 text-sm text-left bg-transparent border-none outline-none" placeholder="0.0"
+          step="any" value="" aria-label="T-3 input in amperes">
+        <span class="pr-2 font-semibold text-xs text-gray-700">A</span>
+      </div>
+      <div
+        class="text-center font-semibold bg-white/80 rounded-md px-1 py-1.5 text-gray-800 h-9 flex items-center justify-center text-sm">
+        T-3</div>
+      <div id="o9"
+        class="w-full bg-gray-200 rounded-md border border-gray-300 text-sm font-semibold text-gray-900 flex items-center justify-end px-2 h-9">
+        0.0 MW</div>
+    </div>
+
+    <!-- Summary boxes -->
+    <div class="flex gap-2.5 mt-4">
+      <div id="bottail-box"
+        class="flex-1 py-2.5 px-1 bg-green-600 text-white rounded-md text-center text-sm font-medium">Bottail: 0.0 MW
+      </div>
+      <div id="total-box" class="flex-1 py-2.5 px-1 bg-blue-600 text-white rounded-md text-center text-sm font-medium">
+        Total: 0.0 MW</div>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="flex gap-2.5 mt-2.5">
+      <button id="calculateBtn"
+        class="flex-1 py-2.5 px-1 bg-blue-500 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition-colors">Calculate</button>
+      <button id="copyBtn"
+        class="flex-1 py-2.5 px-1 bg-green-500 text-white rounded-md text-sm font-medium hover:bg-green-700 transition-colors">Copy
+        Total</button>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-5">
+      <p class="bg-green-500 p-1 rounded-md text-center text-sm text-white">
+        All Rights Reserved || SBA-Bottail, WZPDCL
+      </p>
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      // --- Configuration constants ---
+      const CONFIG = {
+        VOLTAGE_FACTOR: 18,        // Conversion factor for A to MW (33/11 kV)
+        BOTTAIL_FEEDERS: [1, 2, 8, 9], // Indices (1-based) that belong to Bottail
+        FEEDER_COUNT: 9,
+        TIMEZONE: 'Asia/Dhaka'
+      };
+
+      // --- DOM element cache ---
+      const elements = {
+        date: document.getElementById('date'),
+        time: document.getElementById('time'),
+        bottailBox: document.getElementById('bottail-box'),
+        totalBox: document.getElementById('total-box'),
+        calculateBtn: document.getElementById('calculateBtn'),
+        copyBtn: document.getElementById('copyBtn'),
+        inputs: [],
+        outputs: []
+      };
+
+      // --- Initialize the application ---
+      function init() {
+        cacheInputsAndOutputs();
+        attachEventListeners();
+        startClock();
+        disableNumberInputScroll();
+      }
+
+      // --- Cache DOM elements for better performance ---
+      function cacheInputsAndOutputs() {
+        for (let i = 1; i <= CONFIG.FEEDER_COUNT; i++) {
+          elements.inputs[i] = document.getElementById(`i${i}`);
+          elements.outputs[i] = document.getElementById(`o${i}`);
+        }
+      }
+
+      // --- Attach event listeners ---
+      function attachEventListeners() {
+        if (elements.calculateBtn) {
+          elements.calculateBtn.addEventListener('click', calculateWithFeedback);
+        }
+
+        if (elements.copyBtn) {
+          elements.copyBtn.addEventListener('click', copyTotal);
+        }
+
+        // Also allow calculation on Enter key in any input
+        for (let i = 1; i <= CONFIG.FEEDER_COUNT; i++) {
+          const input = elements.inputs[i];
+          if (input) {
+            input.addEventListener('keypress', (e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                calculate();
+              }
+            });
+          }
+        }
+      }
+
+      // --- Core calculation logic ---
+      function calculate() {
+        let total = 0;
+        let bottail = 0;
+
+        // Calculate individual feeder values
+        for (let i = 1; i <= CONFIG.FEEDER_COUNT; i++) {
+          const inputElement = elements.inputs[i];
+          if (!inputElement) continue;
+
+          const inputValue = parseFloat(inputElement.value) || 0;
+          const result = inputValue / CONFIG.VOLTAGE_FACTOR;
+
+          if (elements.outputs[i]) {
+            elements.outputs[i].innerText = result.toFixed(1) + ' MW';
+          }
+
+          total += result;
+
+          if (CONFIG.BOTTAIL_FEEDERS.includes(i)) {
+            bottail += result;
+          }
+        }
+
+        // Update summary boxes
+        if (elements.bottailBox) {
+          elements.bottailBox.innerText = `Bottail: ${bottail.toFixed(1)} MW`;
+        }
+
+        if (elements.totalBox) {
+          elements.totalBox.innerText = `Total: ${total.toFixed(1)} MW`;
+        }
+
+        return { total, bottail };
+      }
+
+      // --- Calculate button with visual feedback ---
+      function calculateWithFeedback(event) {
+        event?.preventDefault();
+
+        calculate();
+
+        const btn = elements.calculateBtn;
+        if (!btn) return;
+
+        const originalText = btn.innerText;
+        btn.innerText = '✔ Success';
+        btn.classList.remove('hover:bg-blue-700');
+        btn.classList.add('hover:bg-cyan-700');
+        btn.style.background = '#17a2b8';
+
+        setTimeout(() => {
+          btn.innerText = 'Calculate';
+          btn.style.background = '';
+          btn.classList.remove('hover:bg-cyan-700');
+          btn.classList.add('hover:bg-blue-700');
+        }, 2000);
+      }
+
+      // --- Copy total with feedback ---
+      function copyTotal(event) {
+        event?.preventDefault();
+
+        if (!elements.totalBox) return;
+
+        const totalText = elements.totalBox.innerText;
+        const totalValue = parseFloat(totalText.split(':')[1]) || 0;
+        const roundedTotal = Math.round(totalValue);
+        const textToCopy = `Bottail : ${roundedTotal} MW`;
+
+        const btn = elements.copyBtn;
+        if (!btn) return;
+
+        // Success feedback function
+        const showSuccess = () => {
+          btn.innerText = '✔ Copied';
+          btn.style.background = '#17a2b8';
+
+          setTimeout(() => {
+            btn.innerText = 'Copy Total';
+            btn.style.background = '#28a745';
+          }, 2000);
+        };
+
+        // Fallback copy method for older browsers
+        const fallbackCopy = () => {
+          const textarea = document.createElement('textarea');
+          textarea.value = textToCopy;
+          textarea.style.position = 'fixed';
+          textarea.style.opacity = '0';
+          document.body.appendChild(textarea);
+
+          try {
+            textarea.select();
+            document.execCommand('copy');
+            showSuccess();
+          } catch (err) {
+            alert('Please manually copy: ' + textToCopy);
+          } finally {
+            document.body.removeChild(textarea);
+          }
+        };
+
+        // Try modern clipboard API first
+        if (navigator.clipboard?.writeText) {
+          navigator.clipboard.writeText(textToCopy)
+            .then(showSuccess)
+            .catch(fallbackCopy);
+        } else {
+          fallbackCopy();
+        }
+      }
+
+      // --- Clock functionality ---
+      function updateClock() {
+        const now = new Date();
+
+        if (elements.date) {
+          elements.date.innerText = now.toLocaleDateString('en-US', {
+            timeZone: CONFIG.TIMEZONE,
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          });
+        }
+
+        if (elements.time) {
+          elements.time.innerText = now.toLocaleTimeString('en-US', {
+            timeZone: CONFIG.TIMEZONE,
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true
+          });
+        }
+      }
+
+      function startClock() {
+        updateClock();
+        setInterval(updateClock, 1000);
+      }
+
+      // --- Disable wheel and arrow keys on number inputs ---
+      function disableNumberInputScroll() {
+        for (let i = 1; i <= CONFIG.FEEDER_COUNT; i++) {
+          const input = elements.inputs[i];
+          if (!input) continue;
+
+          input.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+              e.preventDefault();
+            }
+          });
+
+          input.addEventListener('wheel', (e) => {
+            e.preventDefault();
+          }, { passive: false });
+        }
+      }
+
+      // --- Initialize when DOM is ready ---
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+
+    })();
+  </script>
+
+  <!-- Tailwind CLI instructions comment preserved -->
+  <!-- 
+    TAILWIND CLI INSTRUCTIONS:
+    1. Create a project folder and place this HTML file
+    2. Run: npm init -y && npm install -D tailwindcss
+    3. Run: npx tailwindcss init
+    4. In tailwind.config.js, set content: ["./*.html"]
+    5. Create src/input.css with Tailwind directives
+    6. Build: npx tailwindcss -i ./src/input.css -o ./dist/output.css --watch
+    7. Link ./dist/output.css in the head
+    npx tailwindcss -i ./src/input.css -o ./output.css --watch
+  -->
+</body>
+
+</html>
